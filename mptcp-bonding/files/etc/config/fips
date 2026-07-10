@@ -1,0 +1,23 @@
+config fips 'global'
+	option enabled '1'
+	option interface 'br-mesh'
+	option mesh_id 'freedomtech'
+	option port '9001'
+	option ipv6 '1'
+	option nat_traversal '1'
+
+config fips 'gateway'
+	option enabled '0'
+	option gateway_interface 'wan'
+	option mesh_interface 'br-mesh'
+	option masquerade '1'
+	option max_clients '100'
+
+config fips 'logging'
+	option log_level 'info'
+	option log_file '/var/log/fips.log'
+
+config fips 'security'
+	option enable_encryption '1'
+	option encryption_key ''
+	option auth_mode 'none'

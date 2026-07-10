@@ -1,0 +1,57 @@
+# TollGate configuration file
+# This file controls the TollGate metered access gateway
+
+# Server configuration
+server:
+  listen_address: "0.0.0.0:8080"
+  admin_address: "0.0.0.0:8081"
+  
+# Database configuration
+database:
+  path: "/etc/tollgate/tollgate.db"
+  
+# Cashu mint configuration
+mint:
+  url: "https://mint.example.com"
+  name: "TollGate Mint"
+  pubkey: ""
+  
+# Network configuration
+network:
+  interface: "br-lan"
+  gateway_ip: "192.168.1.1"
+  dns_servers: ["8.8.8.8", "8.8.4.4"]
+  
+# Access control
+access:
+  default_quota_mb: 100
+  default_duration_hours: 24
+  max_sessions_per_user: 5
+  enable_captive_portal: true
+  
+# Payment configuration
+payment:
+  rate_mb_per_sat: 10
+  minimum_payment_sats: 100
+  max_balance_sats: 10000
+  
+# Logging configuration
+logging:
+  level: "info"
+  file: "/var/log/tollgate.log"
+  max_size_mb: 10
+  max_files: 5
+  
+# Security configuration
+security:
+  enable_tls: false
+  tls_cert_path: ""
+  tls_key_path: ""
+  api_key: ""
+  
+# Features
+features:
+  enable_statistics: true
+  enable_webui: true
+  enable_api: true
+  enable_nftables: false

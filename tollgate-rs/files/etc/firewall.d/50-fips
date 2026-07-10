@@ -1,0 +1,22 @@
+# FIPS mesh network firewall configuration
+# This file sets up firewall rules for mesh networking
+
+# Allow mesh traffic on the mesh interface
+iptables -t filter -A INPUT -i br-mesh -p udp --dport 9001 -j ACCEPT
+iptables -t filter -A INPUT -i br-mesh -p udp --dport 9002 -j ACCEPT
+iptables -t filter -A INPUT -i br-mesh -p tcp --dport 9001 -j ACCEPT
+iptables -t filter -A INPUT -i br-mesh -p tcp --dport 9002 -j ACCEPT
+
+# Allow multicast traffic for mesh discovery
+iptables -t filter -A INPUT -i br-mesh -d 224.0.0.0/4 -j ACCEPT
+iptables -t filter -A OUTPUT -o br-mesh -d 224.0.0.0/4 -j ACCEPT
+
+# Allow mesh traffic to be forwarded
+iptables -t filter -A FORWARD -i br-mesh -o br-mesh -j ACCEPT
+
+# Allow traffic from mesh to gateway
+iptables -t filter -A FORWARD -i br-mesh -o wan -j ACCEPT
+iptables -t filter -A FORWARD -i wan -o br-mesh -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Enable masquerading for gateway traffic
+iptables -t nat -A POSTROUTING -o wan -s 10.10.0.0/16 -j MASQUERADE

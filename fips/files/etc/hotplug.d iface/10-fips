@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# FIPS hotplug script for interface events
+# This script handles interface up/down events for mesh networking
+
+[ "$ACTION" = "ifup" ] || exit 0
+[ "$INTERFACE" = "br-mesh" ] || exit 0
+
+# Check if FIPS is enabled
+local enabled=$(uci get fips.global.enabled 2>/dev/null)
+[ "$enabled" = "1" ] || exit 0
+
+# Restart FIPS when mesh interface comes up
+logger "FIPS: mesh interface $INTERFACE is up, restarting FIPS services"
+/etc/init.d/fips restart
+
+# If gateway is enabled, restart gateway too
+local gateway_enabled=$(uci get fips.gateway.enabled 2>/dev/null)
+if [ "$gateway_enabled" = "1" ]; then
+    /etc/init.d/fips-gateway restart
+    logger "FIPS: gateway services restarted"
+fi
+
+exit 0
